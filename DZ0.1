@@ -1,0 +1,201 @@
+package com.gmail.sersaseks;
+
+public class Main {
+
+	public static void main(String[] args) {
+
+		Cat cat1 = new Cat("Wassyliy", "Grey", 7, 10);
+		cat1.nameOfCat();
+		cat1.weightOfCat();
+		cat1.catEag();
+		cat1.catColor();
+		cat1.myau();
+		cat1.catStepOn();
+		cat1.engriMyau();
+		cat1.engringCat();
+		cat1.catGrowl();
+		cat1.catPat();
+		cat1.catPurr();
+		cat1.catEat();
+		cat1.catKuss();
+		cat1.catShiting();
+		cat1.catSleep();
+		cat1.repaintCat(cat1,"Blue");
+		cat1.reactionOfCatRepaint();
+
+		Cat cat2 = new Cat("Fedor", "Blakc", 5, 5);
+		cat2.nameOfCat();
+		cat2.weightOfCat();
+		cat2.catEag();
+		cat2.catColor();
+		cat2.myau();
+		cat2.catStepOn();
+		cat2.engriMyau();
+		cat2.engringCat();
+		cat2.catGrowl();
+		cat2.catPat();
+		cat2.catPurr();
+		cat2.catEat();
+		cat2.catKuss();
+		cat2.catShiting();
+		cat2.catSleep();
+		cat2.repaintCat(cat2,"Read");
+		cat2.reactionOfCatRepaint();
+		
+		Cat cat3 = new Cat("Boris", "White", 3, 6);
+		cat3.nameOfCat();
+		cat3.weightOfCat();
+		cat3.catEag();
+		cat3.catColor();
+		cat3.myau();
+		cat3.catStepOn();
+		cat3.engriMyau();
+		cat3.engringCat();
+		cat3.catGrowl();
+		cat3.catPat();
+		cat3.catPurr();
+		cat3.catEat();
+		cat3.catKuss();
+		cat3.catShiting();
+		cat3.catSleep();
+		cat3.repaintCat(cat1,"gren");
+		cat3.reactionOfCatRepaint();
+	}
+}
+package com.gmail.sersaseks;
+
+public class Cat {
+
+	private String nameOfCat;
+	private String colorOfCat;
+	private int ageOfCat;
+	private double weightOfCat;
+
+	Cat(String nameOfCat, String colorOfCat, int ageOfCat, double weightOfCat) {
+		this.nameOfCat = nameOfCat;
+		this.colorOfCat = colorOfCat;
+		this.ageOfCat = ageOfCat;
+		this.weightOfCat = weightOfCat;
+	}
+
+	Cat() {
+	}
+
+	public String getNameOfCat() {
+		return nameOfCat;
+	}
+
+	public void setNameOfCat(String nameOfCat) {
+		this.nameOfCat = nameOfCat;
+	}
+
+	public String getColorOfCat() {
+		return colorOfCat;
+	}
+
+	public void setColorOfCat(String colorOfCat) {
+		this.colorOfCat = colorOfCat;
+	}
+
+	public int getAgeOfCat() {
+		return ageOfCat;
+	}
+
+	public void setAgeOfCat(int ageOfCat) {
+		this.ageOfCat = ageOfCat;
+	}
+
+	public double getWeightOfCat() {
+		return weightOfCat;
+	}
+
+	public void setWeightOfCat(double weightOfCat) {
+		this.weightOfCat = weightOfCat;
+	}
+
+	public void nameOfCat() {
+		System.out.println("Name Of Cat is " + nameOfCat);
+	}
+
+	public void weightOfCat() {
+		System.out.println("Weight Of Cat " + nameOfCat + " is " + weightOfCat);
+	}
+
+	public void catEag() {
+		System.out.println("Age of the cat " + nameOfCat + " " + ageOfCat + " years");
+	}
+
+	public void catColor() {
+		System.out.println("Now the color of the cat " + nameOfCat + " is" + " " + colorOfCat);
+
+	}
+
+	public void myau() {
+		System.out.println(nameOfCat + "-" + "Myau");
+	}
+
+	public void catStepOn() {
+		engriMyau();
+		catKuss();
+
+	}
+
+	public void engriMyau() {
+		System.out.println(nameOfCat + "-" + "Myaaaauuu");
+	}
+
+	public void engringCat() {
+		System.out.println("You made the cat angry");
+		System.out.println("Now he is angry");
+		catGrowl();
+	}
+
+	public void catGrowl() {
+		System.out.println(nameOfCat + "-" + "RRRRRRRRRR");
+	}
+
+	public void catPat() {
+		System.out.println("took the cat on the handle and stroked");
+		catPurr();
+	}
+
+	public void catPurr() {
+		System.out.print(nameOfCat + "-");
+
+		for (int i = 0; i <= 20; i++) {
+
+			System.out.println("Purr-Purr-Purr-Purr");
+		}
+	}
+
+	public void catEat() {
+		System.out.println(nameOfCat + "-" + "eating");
+		System.out.println("Sound eating food");
+
+	}
+
+	public void catKuss() {
+		System.out.println(nameOfCat + "-" + "Kuss-bastard");
+	}
+
+	public void catShiting() {
+		System.out.println(nameOfCat + "-" + "sat down to take a shit");
+
+	}
+
+	public void catSleep() {
+		System.out.println(nameOfCat + "-" + "sleeping");
+	}
+
+	Cat repaintCat(Cat a, String newcolor) {
+		a.colorOfCat = newcolor;
+		System.out.println("you are repaint a" + " " + nameOfCat);
+		reactionOfCatRepaint();
+		return a;
+	}
+
+	public void reactionOfCatRepaint() {
+		System.out.println("On the" + " " + nameOfCat + "'s " + "face, hatred is read and the question \"Why?\"");
+	}
+
+}
