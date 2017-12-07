@@ -1,0 +1,197 @@
+package com.gmail.sersaseks;
+
+public class Main {
+
+	public static void main(String[] args) {
+
+		Point Centr = new Point(2, 4);
+		Point PointR = new Point(0, 6);
+		Circle c1 = new Circle(Centr, PointR);
+
+		System.out.println("Perimetr of Circle is " + c1.getPerimetr());
+		System.out.println("Area of  Circle is " + c1.getArea());
+
+		System.out.println();
+
+		Point a = new Point(1, 1);
+		Point b = new Point(6, 4);
+		Point c = new Point(2, 9);
+		Triangle t1 = new Triangle(a, b, c);
+
+		System.out.println("Perimetr of Triangl is " + t1.getPerimetr());
+		System.out.println("Area of Triangl is " + t1.getArea());
+
+	}
+}
+package com.gmail.sersaseks;
+
+public abstract class Shape {
+
+	public abstract double getPerimetr();
+
+	public abstract double getArea();
+}
+package com.gmail.sersaseks;
+
+public class Point {
+
+	private double x;
+	private double y;
+
+	Point(double x, double y) {
+		this.x = x;
+		this.y = y;
+	}
+
+	Point() {
+
+	}
+
+	public double getX() {
+		return x;
+	}
+
+	public void setX(double x) {
+		this.x = x;
+	}
+
+	public double getY() {
+		return y;
+	}
+
+	public void setY(double y) {
+		this.y = y;
+	}
+
+}
+package com.gmail.sersaseks;
+
+public class Circle extends Shape {
+
+	private Point centr;
+	private Point pointR;
+
+	public Circle(Point centr, Point pointR) {
+		super();
+		this.centr = centr;
+		this.pointR = pointR;
+	}
+
+	public Circle() {
+		super();
+	}
+
+	public Point getCentr() {
+		return centr;
+	}
+
+	public void setCentr(Point centr) {
+		this.centr = centr;
+	}
+
+	public Point getPointR() {
+		return pointR;
+	}
+
+	public void setPointR(Point pointR) {
+		this.pointR = pointR;
+	}
+
+	@Override
+	public double getPerimetr() {
+		double CentrX = centr.getX();
+		double CentrY = centr.getY();
+		double PointRX = pointR.getX();
+		double PointRY = pointR.getY();
+		double R = Math.sqrt((Math.pow((CentrX - PointRX), 2)) + (Math.pow((CentrY - PointRY), 2)));
+		double Perimetr = 2 * Math.PI * R;
+		return Perimetr;
+	}
+
+	@Override
+	public double getArea() {
+		double CentrX = centr.getX();
+		double CentrY = centr.getY();
+		double PointRX = pointR.getX();
+		double PointRY = pointR.getY();
+		double R = Math.sqrt((Math.pow((CentrX - PointRX), 2)) + (Math.pow((CentrY - PointRY), 2)));
+		double area = Math.PI * Math.pow(R, 2);
+		return area;
+	}
+
+}
+package com.gmail.sersaseks;
+
+public class Triangle extends Shape {
+
+	private Point a;
+	private Point b;
+	private Point c;
+
+	Triangle(Point a, Point b, Point c) {
+		super();
+		this.a = a;
+		this.b = b;
+		this.c = c;
+	}
+
+	public Triangle() {
+		super();
+
+	}
+
+	public Point getA() {
+		return a;
+	}
+
+	public void setA(Point a) {
+		this.a = a;
+	}
+
+	public Point getB() {
+		return b;
+	}
+
+	public void setB(Point b) {
+		this.b = b;
+	}
+
+	public Point getC() {
+		return c;
+	}
+
+	public void setC(Point c) {
+		this.c = c;
+	}
+
+	@Override
+	public double getPerimetr() {
+		double Ax = a.getX();
+		double Ay = a.getY();
+		double Bx = b.getX();
+		double By = b.getY();
+		double Cx = c.getX();
+		double Cy = c.getY();
+		double AB = Math.sqrt(((Math.pow((Bx - Ax), 2) + (Math.pow((By - Ay), 2)))));
+		double AC = Math.sqrt(((Math.pow((Cx - Ax), 2) + (Math.pow((Cy - Ay), 2)))));
+		double BC = Math.sqrt(((Math.pow((Cx - Bx), 2) + (Math.pow((Cy - By), 2)))));
+		double Perimetr = AB + AC + BC;
+		return Perimetr;
+	}
+
+	@Override
+	public double getArea() {
+		double Ax = a.getX();
+		double Ay = a.getY();
+		double Bx = b.getX();
+		double By = b.getY();
+		double Cx = c.getX();
+		double Cy = c.getY();
+		double AB = Math.sqrt(((Math.pow((Bx - Ax), 2) + (Math.pow((By - Ay), 2)))));
+		double AC = Math.sqrt(((Math.pow((Cx - Ax), 2) + (Math.pow((Cy - Ay), 2)))));
+		double BC = Math.sqrt(((Math.pow((Cx - Bx), 2) + (Math.pow((Cy - By), 2)))));
+		double p = (AB + AC + BC) / 2;
+		double area = Math.sqrt((p - AB) * (p - AC) * (p - BC));
+		return area;
+	}
+}
