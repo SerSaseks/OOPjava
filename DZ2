@@ -1,0 +1,256 @@
+package com.gmail.sersaseks;
+
+import java.util.List;
+
+public class Main {
+
+	public static void main(String[] args) {
+
+		Student s1 = new Student("Иголь", "Иванов", 20, true, 1);
+		Student s2 = new Student("Вася", "Ивнин", 20, true, 2);
+		Student s3 = new Student("Мирон", "Кукев", 20, true, 3);
+		Student s4 = new Student("Григорий", "Жопнепрв", 20, true, 4);
+		Student s5 = new Student("Афоний", "Лупин", 20, true, 5);
+		Student s6 = new Student("Иголь", "Иванов", 20, true, 1);
+		Student s7 = new Student("Вася", "Ивнин", 20, true, 2);
+		Student s8 = new Student("Мирон", "Кукев", 20, true, 3);
+		Student s9 = new Student("Григорий", "Жопнепрв", 20, true, 4);
+		Student s10 = new Student("Афоний", "Лупин", 20, true, 5);
+
+		System.out.println();
+
+		Group group = new Group();
+		try {
+			group.add(s1);
+			group.add(s2);
+			group.add(s3);
+			group.add(s4);
+			group.add(s5);
+			group.add(s6);
+			group.add(s7);
+			group.add(s8);
+			group.add(s9);
+			group.add(s10);
+
+		} catch (OutOfBoundsException e) {
+			System.out.println(e.getMessage());
+		}
+		System.out.println();
+
+		List<Student> searchResult = group.search("Петров");
+		for (Student currentStudent : searchResult) {
+			System.out.println(currentStudent.toString());
+		}
+		System.out.println();
+
+		System.out.println(group);
+		group.remove(s1);
+
+	}
+}
+package com.gmail.sersaseks;
+
+public class Human {
+
+	private String name;
+	private String surname;
+	private int age;
+	private boolean sex;
+
+	public Human(String name, String surname, int age, boolean sex) {
+		super();
+		this.name = name;
+		this.surname = surname;
+		this.age = age;
+		this.sex = sex;
+	}
+
+	public Human() {
+		super();
+	}
+
+	public String getName() {
+		return name;
+	}
+
+	public void setName(String name) {
+		this.name = name;
+	}
+
+	public String getSurname() {
+		return surname;
+	}
+
+	public void setSurname(String surname) {
+		this.surname = surname;
+	}
+
+	public int getAge() {
+		return age;
+	}
+
+	public void setAge(int age) {
+		this.age = age;
+	}
+
+	public boolean getSex() {
+		return sex;
+	}
+
+	public void setSex(boolean sex) {
+		this.sex = sex;
+	}
+
+	public String sexToString(boolean a) {
+		String s;
+		if (a == true) {
+			s = "Муж.";
+		} else {
+			s = "Жен.";
+		}
+		return s;
+	}
+
+	@Override
+	public String toString() {
+
+		return name + " " + surname + " " + age + " " + sexToString(sex);
+	}
+
+}
+package com.gmail.sersaseks;
+
+public class Student extends Human {
+
+	private int numberStud;
+
+	public Student(String name, String surname, int age, boolean sex, int numberStud) {
+		super(name, surname, age, sex);
+		this.numberStud = numberStud;
+	}
+
+	public Student(String name, String surname, int age, boolean sex) {
+		super(name, surname, age, sex);
+	}
+
+	public int getNumberStud() {
+		return numberStud;
+	}
+
+	public void setNumberStud(int numberStud) {
+		this.numberStud = numberStud;
+	}
+
+	@Override
+	public String toString() {
+		return getName() + " " + getSurname() + " " + getAge() + " " + sexToString(getSex())+" "+numberStud;
+	}
+}
+package com.gmail.sersaseks;
+
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.List;
+
+public class Group {
+
+	private Student[] group;
+	private int indexPointer;
+
+	public Group(Student[] group, int indexPointer) {
+		super();
+		this.group = group;
+		this.indexPointer = indexPointer;
+	}
+
+	public Group() {
+		group = new Student[10];
+		indexPointer = 0;
+	}
+
+	public Student[] getGroup() {
+		return group;
+	}
+
+	public void setGroup(Student[] group) {
+		this.group = group;
+	}
+
+	public int getIndexPointer() {
+		return indexPointer;
+	}
+
+	public void setIndexPointer(int indexPointer) {
+		this.indexPointer = indexPointer;
+	}
+
+	public void add(Student student) throws OutOfBoundsException {
+		if (indexPointer > 10) {
+			throw new OutOfBoundsException();
+		}
+		if (student == null) {
+			throw new IllegalArgumentException("Argument is Null");
+		}
+		if (studentInGroup(student) < 0) {
+			group[indexPointer++] = student;
+			System.out.println("Студент " + student.getName() + " " + student.getSurname() + " добавлен в группу.");
+		} else {
+			System.out.println("Такой студент уже есть в этой группе");
+		}
+	}
+
+	public void remove(Student student) {
+		int index = studentInGroup(student);
+		if (index >= 0) {
+			group[index] = null;
+			indexPointer = index;
+			System.out.println("Студент " + student.getName() + " " + student.getSurname() + " удален из группы.");
+		} else
+			System.out.println("Нет такого студента");
+	}
+
+	public List<Student> search(String lastName) {
+		List<Student> result = new ArrayList<>();
+		for (int i = 0; i < group.length; i++) {
+			if (group[i] != null && group[i].getSurname().equalsIgnoreCase(lastName)) {
+				result.add(group[i]);
+			}
+		}
+		if (result.size() == 0) {
+			System.out.println("Ничего не найдено.");
+		}
+		return result;
+	}
+
+	@Override
+	public String toString() {
+		List<Student> sortedList = new ArrayList<>(Arrays.asList(group));
+		removeNulls(sortedList);
+		sortedList.sort((o1, o2) -> o1.getName().compareToIgnoreCase(o2.getSurname()));
+		for (Student student : sortedList) {
+			System.out.println(student);
+		}
+		return "";
+	}
+
+	private int studentInGroup(Student student) {
+		for (int i = 0; i < group.length; i++) {
+			if (group[i] != null && student.equals(group[i]))
+				return i;
+		}
+		return -1;
+	}
+
+	private void removeNulls(List<Student> groupList) {
+		groupList.removeIf(p -> p == null);
+	}
+}
+package com.gmail.sersaseks;
+
+public class OutOfBoundsException extends Exception {
+
+	@Override
+	public String getMessage() {
+		return "Group full, delete someone!";
+	}
+}
