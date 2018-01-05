@@ -1,0 +1,106 @@
+package com.gmail.sersaseks;
+
+import java.util.Scanner;
+
+public class Main {
+
+	public static void main(String[] args) {
+
+		start();
+
+	}
+
+	public static void start() {
+		Scanner sn = new Scanner(System.in);
+		for (;;) {
+			System.out.println("Hello Alexey");
+			System.out.println("If you hotet first zadacha input 1 if second 2 ");
+			System.out.println("If time to stop, input Harosh");
+			String x;
+			x = sn.nextLine();
+			if (x.equals("1")) {
+				multiple();
+			}
+
+			if (x.equals("2")) {
+				palindrome();
+			}
+
+			if (x.equals("Harosh")) {
+				System.out.println("Poka!)");
+				break;
+			}
+
+		}
+	}
+
+	public static void multiple() {
+		int a = 0;
+		int b = 0;
+		int s = 0;
+		int c = 0;
+		int c2 = 0;
+		int c3 = 0;
+
+		for (int i = 1; i <= 1000; i++) {
+			if (i % 3 == 0) {
+				a = a + i;
+				c = c + 1;
+			}
+			if (i % 5 == 0) {
+				b = b + i;
+				c2 = c2 + 1;
+			}
+			s = a + b;
+			c3 = c3 + 1;
+			System.out
+					.println("iteration " + i + " " + "number of multiple 3=" + c + " " + "number of multiple 5=" + c2);
+			System.out.println("sum of multiple 3= " + a + ", sum of multiple 5= " + b + ", sum=" + s);
+			System.out.println();
+		}
+		System.out.println("Done!");
+		System.out.println("iteration " + c3 + " " + "number of multiple 3=" + c + " " + "number of multiple 5=" + c2);
+		System.out.println("sum of multiple 3= " + a);
+		System.out.println("sum of multiple 5= " + b);
+		System.out.println("sum= " + s);
+	}
+
+	public static void palindrome() {
+		int maxPalindrome = 1;
+		int palNum1 = 1;
+		int palNum2 = 1;
+		int totalPal = 0;
+		boolean isPalindrome = false;
+		for (int i = 100; i <= 999; i++) {
+			for (int j = 100; j <= 999; j++) {
+				isPalindrome = checkPalindrome(i, j);
+				if (isPalindrome) {
+					totalPal++;
+					if (i * j > maxPalindrome) {
+						maxPalindrome = i * j;
+						palNum1 = i;
+						palNum2 = j;
+					}
+					isPalindrome = false;
+				}
+			}
+		}
+		System.out.println("Total " + totalPal + " palindroms were found. Max palindrome is:");
+		System.out.println(palNum1 + " X " + palNum2 + " = " + palNum1 * palNum2);
+	}
+
+	public static boolean checkPalindrome(int i, int j) {
+		char[] chars = String.valueOf(i * j).toCharArray();
+		boolean isPalindrome = true;
+		for (int k = 0; k <= (chars.length) / 2; k++) {
+			if (chars[k] == chars[chars.length - 1 - k]) {
+				continue;
+			} else {
+				isPalindrome = false;
+				break;
+			}
+		}
+		return isPalindrome;
+	}
+	// Написал это гавно в процедурном стиле
+}
