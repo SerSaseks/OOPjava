@@ -1,0 +1,151 @@
+package com.gmail.sersaseks;
+
+import java.util.Arrays;
+import java.util.Random;
+
+public class Main {
+
+	public static void main(String[] args) {
+		int[] array = new int[200000];
+		Random rn = new Random();
+		for (int i = 0; i < array.length; i++) {
+			array[i] = rn.nextInt(10);
+		}
+		int[] array2 = array.clone();
+		int[] array3 = array.clone();
+		long tstart = System.currentTimeMillis();
+		sort(array);
+		long tend = System.currentTimeMillis();
+		System.out.println((tend - tstart) + "  ms" + "- Static method sort");
+		tstart = System.currentTimeMillis();
+		MultiThreadSorting.sort(array2, 3);
+		tend = System.currentTimeMillis();
+		System.out.println((tend - tstart) + "  ms" + " - MultiThread sort");
+		tstart = System.currentTimeMillis();
+		Arrays.sort(array3);
+		tend = System.currentTimeMillis();
+		System.out.println((tend - tstart) + "  ms" + " - Array sort");
+
+	}
+
+	static void sort(int[] array) {
+		int temp;
+		for (int i = 1; i < array.length; i++) {
+			int k = i - 1;
+			temp = array[i];
+			for (; k >= 0 && array[k] > temp;) {
+				array[k + 1] = array[k];
+				array[k] = temp;
+				k--;
+			}
+
+		}
+
+	}
+}
+package com.gmail.sersaseks;
+
+public class MultiThreadSorting {
+	static void sort(int[] array, int threadNumber) {
+		SingleThreadSorting[] threadarray = new SingleThreadSorting[threadNumber];
+		for (int i = 0; i < threadarray.length; i++) {
+			int size = array.length / threadNumber;
+			int begin = size * i;
+			int end = ((i + 1) * size);
+			if ((array.length - end) < size) {
+				end = array.length;
+			}
+			threadarray[i] = new SingleThreadSorting(array, begin, end);
+		}
+		for (int i = 0; i < threadarray.length; i++) {
+			try {
+				threadarray[i].getThr().join();
+			} catch (InterruptedException e) {
+				System.out.println(e);
+			}
+
+		}
+		System.arraycopy(mergeArrays(array, threadarray), 0, array, 0, array.length);
+	}
+
+	private static int[] mergeArrays(int[] array, SingleThreadSorting[] threadarray) {
+		int[] arr = new int[array.length];
+		for (int i = 0; i < arr.length; i++) {
+			int min = Integer.MAX_VALUE;
+			int k = -1;
+			for (int j = 0; j < threadarray.length; j++) {
+				if (!threadarray[j].isStop() && min > threadarray[j].peekElement()) {
+					min = threadarray[j].peekElement();
+					k = j;
+				}
+			}
+			if (k != -1) {
+				arr[i] = threadarray[k].pollElement();
+			}
+		}
+
+		return arr;
+	}
+
+}
+package com.gmail.sersaseks;
+
+public class SingleThreadSorting implements Runnable {
+	private int[] array;
+	private int begin;
+	private int end;
+	private Thread thr;
+	private int index;
+	private boolean stop = false;
+
+	public SingleThreadSorting(int[] array, int begin, int end) {
+		super();
+		this.array = array;
+		this.begin = begin;
+		this.end = end;
+		thr = new Thread(this);
+		thr.start();
+		this.index = begin;
+	}
+
+	public Thread getThr() {
+		return thr;
+	}
+
+	public int peekElement() {
+		return array[index];
+	}
+
+	public int pollElement() {
+		int temp = array[index];
+		check();
+		return temp;
+	}
+
+	public boolean isStop() {
+		return stop;
+	}
+
+	@Override
+	public void run() {
+		int temp;
+		for (int i = begin; i < end; i++) {
+			int k = i - 1;
+			temp = array[i];
+			for (; k >= 0 && array[k] > temp;) {
+				array[k + 1] = array[k];
+				array[k] = temp;
+				k--;
+			}
+
+		}
+	}
+
+	private void check() {
+		this.index++;
+		if (this.index >= this.end) {
+			this.stop = true;
+		}
+	}
+
+}
