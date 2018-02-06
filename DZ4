@@ -1,0 +1,440 @@
+package com.gmail.sersaseks;
+
+public class Main {
+	public static void main(String[] args) {
+
+		Group gr = new Group();
+		try {
+			gr.addStudent(new Student("Alex", "AA", 12, true, 1234, "qwea"));
+			gr.addStudent(new Student("Alex", "AB", 15, true, 1253, "qwwe"));
+			gr.addStudent(new Student("Alex", "BB", 13, true, 14523, "qrwe"));
+			gr.addStudent(new Student("Alex", "BA", 23, true, 12213, "qfwe"));
+			gr.addStudent(new Student("Alex", "AAA", 34, true, 1243, "qewe"));
+			gr.addStudent(new Student("Alex", "AAZ", 2, true, 12123, "qeewe"));
+		} catch (MyException e) {
+			System.out.println(e.getMessage());
+		}
+		System.out.println(gr);
+		gr.sortByParametr(2, true);
+		System.out.println(gr);
+	}
+}
+package com.gmail.sersaseks;
+
+public class Main {
+	public static void main(String[] args) {
+
+		Group gr = new Group();
+		try {
+			gr.addStudent(new Student("Alex", "AA", 12, true, 1234, "qwea"));
+			gr.addStudent(new Student("Alex", "AB", 15, true, 1253, "qwwe"));
+			gr.addStudent(new Student("Alex", "BB", 13, true, 14523, "qrwe"));
+			gr.addStudent(new Student("Alex", "BA", 23, true, 12213, "qfwe"));
+			gr.addStudent(new Student("Alex", "AAA", 34, true, 1243, "qewe"));
+			gr.addStudent(new Student("Alex", "AAZ", 2, true, 12123, "qeewe"));
+		} catch (MyException e) {
+			System.out.println(e.getMessage());
+		}
+		System.out.println(gr);
+		gr.sortByParametr(2, true);
+		System.out.println(gr);
+	}
+}
+package com.gmail.sersaseks;
+
+import java.util.Arrays;
+
+import javax.swing.JOptionPane;
+
+public class Group implements Voencom {
+	private Student[] studentArray = new Student[10];
+
+	public Group() {
+		super();
+	}
+
+	public void addStudentInteractive() throws MyException {
+		Student student = null;
+		try {
+			String name = getName("Input student name");
+			String lastName = getName("Input student lastname");
+			int age = getAge();
+			boolean sex = getSex("Input sex -> man or women");
+			long zach = getZach("Input zach number");
+			String group = getName("Input group name");
+			Student st = new Student(name, lastName, age, sex, zach, group);
+			this.addStudent(st);
+		} catch (NullPointerException e) {
+			System.out.println("Canceled");
+			return;
+		}
+	}
+
+	public void addStudent(Student student) throws MyException {
+		if (student == null) {
+			throw new IllegalArgumentException("Null student");
+		}
+		for (int i = 0; i < studentArray.length; i++) {
+			if (studentArray[i] == null) {
+				studentArray[i] = student;
+				return;
+			}
+		}
+		throw new MyException();
+	}
+
+	public Student search(String lastName) {
+		for (Student student : studentArray) {
+			if (student != null && student.getLastname().equals(lastName)) {
+				return student;
+			}
+		}
+		return null;
+	}
+
+	public void deleteStudent(int n) {
+		if (!(n >= 0 && n < studentArray.length)) {
+			System.out.println("Error index");
+			return;
+		}
+		studentArray[n] = null;
+	}
+
+	private void sort() {
+		for (int i = 0; i < studentArray.length - 1; i++) {
+			for (int j = i + 1; j < studentArray.length; j++) {
+				if (compareStudent(studentArray[i], studentArray[j]) > 0) {
+					Student temp = studentArray[i];
+					studentArray[i] = studentArray[j];
+					studentArray[j] = temp;
+				}
+			}
+		}
+	}
+
+	private int compareStudent(Student a, Student b) {
+		if (a != null && b == null) {
+			return 1;
+		}
+		if (a == null && b != null) {
+			return -1;
+		}
+		if (a == null && b == null) {
+			return 0;
+		}
+		return a.getLastname().compareTo(b.getLastname());
+
+	}
+
+	private int getAge() throws NullPointerException {
+		boolean done = false;
+		int age = 0;
+		for (; !done;) {
+			try {
+				age = Integer.valueOf(JOptionPane.showInputDialog("Input student age"));
+				done = true;
+			} catch (NumberFormatException e) {
+				JOptionPane.showInternalMessageDialog(null, "Invalid ");
+			}
+		}
+		return age;
+	}
+
+	private String getName(String message) throws NullPointerException {
+		boolean done = false;
+		String name = "";
+		for (; !done;) {
+			try {
+				name = JOptionPane.showInputDialog(message);
+				done = true;
+			} catch (NumberFormatException e) {
+				JOptionPane.showInternalMessageDialog(null, "Invalid format");
+			}
+		}
+		return name;
+	}
+
+	private boolean getSex(String message) throws NullPointerException {
+		boolean done = false;
+		boolean name = false;
+		for (; !done;) {
+			try {
+				name = JOptionPane.showInputDialog(message).equals("man");
+				done = true;
+			} catch (NumberFormatException e) {
+				JOptionPane.showInternalMessageDialog(null, "Invalid format");
+			}
+		}
+		return name;
+	}
+
+	private long getZach(String message) throws NullPointerException {
+		boolean done = false;
+		long name = 0;
+		for (; !done;) {
+			try {
+				name = Long.valueOf(JOptionPane.showInputDialog(message));
+				done = true;
+			} catch (NumberFormatException e) {
+				JOptionPane.showInternalMessageDialog(null, "Invalid format");
+			}
+		}
+		return name;
+	}
+
+	public void sortByParametr(int i) {
+		Arrays.sort(this.studentArray, new StudentComparator(i));
+	}
+
+	public void sortByParametr(int i, boolean forward) {
+		Arrays.sort(this.studentArray, new StudentComparator(i, forward));
+	}
+
+	@Override
+	public String toString() {
+		StringBuilder sb = new StringBuilder();
+		int i = 0;
+		// sort();
+		for (Student student : studentArray) {
+			if (student != null) {
+				sb.append((++i) + ") ").append(student);
+				sb.append(System.lineSeparator());
+			}
+		}
+		return sb.toString();
+	}
+
+	@Override
+	public Student[] getRecruter() {
+		int n = 0;
+		for (Student student : studentArray) {
+			if (student != null && student.isSex() && student.getAge() >= 18) {
+				n += 1;
+			}
+		}
+		Student[] studentArray = new Student[n];
+		int i = 0;
+		for (Student student : studentArray) {
+			if (student != null && student.isSex() && student.getAge() >= 18) {
+				studentArray[i++] = student;
+			}
+		}
+		return studentArray;
+	}
+
+}
+package com.gmail.sersaseks;
+
+public class Student extends Human {
+	private long zach;
+	private String group;
+
+	public Student(String name, String lastname, int age, boolean sex, long zach, String group) {
+		super(name, lastname, age, sex);
+		this.zach = zach;
+		this.group = group;
+	}
+  package com.gmail.tsa;
+
+public class Student extends Human {
+	private long zach;
+	private String group;
+
+	public Student(String name, String lastname, int age, boolean sex, long zach, String group) {
+		super(name, lastname, age, sex);
+		this.zach = zach;
+		this.group = group;
+	}
+
+	public Student() {
+		super();
+	}
+
+	public long getZach() {
+		return zach;
+	}
+
+	public void setZach(long zach) {
+		this.zach = zach;
+	}
+
+	public String getGroup() {
+		return group;
+	}
+
+	public void setGroup(String group) {
+		this.group = group;
+	}
+
+	@Override
+	public String toString() {
+		return "Student [zach=" + zach + ", group=" + group + "]" + super.toString();
+	}
+
+}
+package com.gmail.tsa;
+
+import java.util.Comparator;
+
+public class StudentComparator implements Comparator {
+	private int i = 0;
+	private boolean forward = true;
+
+	public StudentComparator(int i) {
+		super();
+		this.i = i;
+	}
+
+	public StudentComparator(int i, boolean forward) {
+		super();
+		this.i = i;
+		this.forward = forward;
+	}
+
+	public int getI() {
+		return i;
+	}
+
+	public void setI(int i) {
+		this.i = i;
+	}
+
+	@Override
+	public int compare(Object a, Object b) {
+
+		int n = (this.forward) ? 1 : -1;
+
+		if (a != null && b == null) {
+			return 1;
+		}
+		if (a == null && b != null) {
+			return -1;
+		}
+		if (a == null && b == null) {
+			return 0;
+		}
+		Student studentOne = (Student) a;
+		Student studentTwo = (Student) b;
+		switch (this.i) {
+		case 0:
+			return (studentOne.getName().compareTo(studentTwo.getName())) * n;
+		case 1:
+			return (studentOne.getLastname().compareTo(studentTwo.getLastname())) * n;
+		case 2:
+			return (studentOne.getAge() - studentTwo.getAge()) * n;
+		case 3:
+			return ((studentOne.isSex()) ? 1 : -1) * n;
+		case 4:
+			return ((studentOne.getZach() > studentTwo.getZach()) ? 1 : -1) * n;
+		case 5:
+			return (studentOne.getGroup().compareTo(studentTwo.getGroup())) * n;
+		}
+		return 0;
+	}
+
+}
+package com.gmail.sersaseks;
+
+public interface Voencom {
+	public Student[] getRecruter();
+}
+
+
+	public Student() {
+		super();
+	}
+
+	public long getZach() {
+		return zach;
+	}
+
+	public void setZach(long zach) {
+		this.zach = zach;
+	}
+
+	public String getGroup() {
+		return group;
+	}
+
+	public void setGroup(String group) {
+		this.group = group;
+	}
+
+	@Override
+	public String toString() {
+		return "Student [zach=" + zach + ", group=" + group + "]" + super.toString();
+	}
+
+}
+package com.gmail.sersaseks;
+
+public interface GroupDAO {
+	public void saveGroup(Group group);
+
+	public Group loadGroup();
+}
+package com.gmail.sersaseks;
+
+import java.io.BufferedReader;
+import java.io.FileReader;
+import java.io.IOException;
+import java.io.PrintWriter;
+
+public class GroupDAOImplementation implements GroupDAO {
+	private String fileadress;
+
+	public GroupDAOImplementation(String fileadress) {
+		super();
+		this.fileadress = fileadress;
+	}
+
+	public GroupDAOImplementation() {
+		super();
+	}
+
+	public String getFileadress() {
+		return fileadress;
+	}
+
+	public void setFileadress(String fileadress) {
+		this.fileadress = fileadress;
+	}
+
+	@Override
+	public void saveGroup(Group group) {
+		try (PrintWriter pw = new PrintWriter(this.fileadress)) {
+			for (Student student : group.getStudentArray()) {
+				if (student != null) {
+					pw.println(student.getName() + ";" + student.getLastname() + ";" + student.getAge() + ";"
+							+ student.isSex() + ";" + student.getZach() + ";" + student.getGroup());
+				}
+			}
+		} catch (IOException e) {
+			System.out.println(e);
+		}
+	}
+
+	@Override
+	public Group loadGroup() {
+		Group groupR = new Group();
+		try (BufferedReader br = new BufferedReader(new FileReader(this.fileadress))) {
+			String text = "";
+			for (; (text = br.readLine()) != null;) {
+				String[] studentDate = text.split(";");
+				String name = studentDate[0];
+				String lastname = studentDate[1];
+				int age = Integer.valueOf(studentDate[2]);
+				boolean sex = (studentDate[3].equals("true"));
+				long zach = Long.valueOf(studentDate[4]);
+				String group = studentDate[5];
+				Student student = new Student(name, lastname, age, sex, zach, group);
+				groupR.addStudent(student);
+
+			}
+		} catch (IOException | MyException e) {
+			System.out.println(e);
+		}
+		return groupR;
+	}
+
+}
