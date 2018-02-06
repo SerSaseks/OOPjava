@@ -1,0 +1,138 @@
+package com.gmail.sersaseks;
+
+import java.io.File;
+import java.math.BigInteger;
+import java.util.Scanner;
+
+public class Main {
+
+	public static void main(String[] args) {
+		// TODO Auto-generated method stub
+		Stack stack = new Stack();
+		BlackList bl = new BlackList();
+		bl.addClassToList(Integer.class);
+		stack.setBlackList(bl);
+		stack.addElement(new File("a.txt"));
+		stack.addElement(new Scanner(System.in));
+		stack.addElement(new BigInteger("12345"));
+		stack.addElement(12345);
+		stack.addElement(true);
+
+		 //System.out.println(stack);
+
+		for (; stack.peek() != null;) {
+			System.out.println(stack.pop());
+		}
+	}
+
+}
+package com.gmail.sersaseks;
+
+public class BlackList {
+	private Class<?>[] classArray = new Class<?>[5];
+	private int n = 0;
+
+	public BlackList() {
+		super();
+	}
+
+	public void addClassToList(Class<?> classOne) {
+		if (isClassPresent(classOne)) {
+			return;
+		}
+		if (n == this.classArray.length) {
+			Class<?>[] temp = new Class<?>[(classArray.length * 7) / 4 + 1];
+			System.arraycopy(classArray, 0, temp, 0, classArray.length);
+			classArray = temp;
+		}
+		classArray[n++] = classOne;
+	}
+
+	private boolean isClassPresent(Class<?> classOne) {
+		for (Class<?> classTwo : classArray) {
+			if (classTwo != null && classOne == classTwo) {
+				return true;
+			}
+		}
+		return false;
+	}
+
+	public boolean checkObject(Object obj){
+		return isClassPresent(obj.getClass());
+	}
+}
+package com.gmail.sersaseks;
+
+public class Stack {
+	private Object[] stackArray = new Object[10];
+	private int top = 0;
+	private BlackList blackList;
+
+	public Stack() {
+		super();
+	}
+
+	public Stack(BlackList blackList) {
+		super();
+		this.blackList = blackList;
+	}
+
+	public BlackList getBlackList() {
+		return blackList;
+	}
+
+	public void setBlackList(BlackList blackList) {
+		this.blackList = blackList;
+	}
+
+	private void resizeUp() {
+		Object[] temp = new Object[(this.stackArray.length * 7) / 4];
+		System.arraycopy(stackArray, 0, temp, 0, stackArray.length);
+		this.stackArray = temp;
+	}
+
+	public boolean addElement(Object obj) {
+		if (obj == null) {
+			return false;
+		}
+		if (blackList.checkObject(obj)) {
+			System.out.println("Class is blackList");
+			return false;
+		}
+		if (top == stackArray.length) {
+			this.resizeUp();
+		}
+		stackArray[top++] = obj;
+		return true;
+
+	}
+
+	public Object pop() {
+		if (top == 0) {
+			return null;
+		}
+		Object temp = stackArray[--top];
+		stackArray[top] = null;
+		return temp;
+	}
+
+	public Object peek() {
+		if (top == 0) {
+			return null;
+		}
+		return stackArray[top - 1];
+	}
+
+	public String toString() {
+		StringBuilder sb = new StringBuilder();
+		for (int i = 0; i < top; i++) {
+			if (stackArray[i] == null) {
+				continue;
+			}
+			sb.append(stackArray[i].getClass() + "   ").append(stackArray[i]);
+			sb.append(System.lineSeparator());
+		}
+		return sb.toString();
+	}
+
+}
