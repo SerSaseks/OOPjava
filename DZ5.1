@@ -1,0 +1,119 @@
+package com.gmail.sersaseks;
+
+import java.util.Random;
+
+public class Main {
+
+	public static void main(String[] args) {
+		// TODO Auto-generated method stub
+		int[] array = new int[200_000_000];
+		Random rn = new Random();
+		for (int i = 0; i < array.length; i++) {
+			array[i] = rn.nextInt(10);
+		}
+		long begin;
+		long end;
+		MultyThreadCalculation multiSum = new MultyThreadCalculation(array);
+		begin = System.currentTimeMillis();
+		System.out.println(multiSum.calculateSum());
+		end = System.currentTimeMillis();
+
+		System.out.println("MultiThread sum " + (end - begin) + " ms");
+		begin = System.currentTimeMillis();
+		System.out.println(getSum(array));
+		end = System.currentTimeMillis();
+		System.out.println("Static method sum  " + (end - begin) + " ms");
+
+	}
+
+	public static int getSum(int[] array) {
+		int sum = 0;
+		for (int i : array) {
+			sum += i;
+		}
+		return sum;
+	}
+
+}
+package com.gmail.sersaseks;
+
+public class MultyThreadCalculation {
+	private int threadNumber;
+	private Thread[] threadArray;
+	private int[] array;
+	private SingleThreadSummator[] stArray;
+
+	public MultyThreadCalculation(int threadNumber, int[] array) {
+		super();
+		this.threadNumber = threadNumber;
+		this.array = array;
+		this.threadArray = new Thread[this.threadNumber];
+		stArray = new SingleThreadSummator[this.threadNumber];
+	}
+
+	public MultyThreadCalculation(int[] array) {
+		super();
+		this.array = array;
+		this.threadNumber = Runtime.getRuntime().availableProcessors() * 2;
+		this.threadArray = new Thread[this.threadNumber];
+		stArray = new SingleThreadSummator[this.threadNumber];
+	}
+
+	public int calculateSum() {
+		int sum = 0;
+		int step = array.length / threadArray.length;
+		for (int i = 0; i < threadArray.length; i++) {
+			int begin = step * i;
+			int end = (array.length - step * (i + 1)) < step ? array.length : step * (i + 1);
+			stArray[i] = new SingleThreadSummator(array, begin, end);
+			threadArray[i] = new Thread(stArray[i]);
+			threadArray[i].start();
+		}
+		for (int i = 0; i < threadArray.length; i++) {
+			try {
+				threadArray[i].join();
+			} catch (InterruptedException e) {
+				e.printStackTrace();
+			}
+		}
+		for (int i = 0; i < stArray.length; i++) {
+			sum += stArray[i].getSum();
+		}
+		return sum;
+	}
+
+}
+package com.gmail.sersaseks;
+
+public class SingleThreadSummator implements Runnable {
+	private int[] array;
+	private int begin;
+	private int end;
+	private int sum;
+
+	public SingleThreadSummator(int[] array, int begin, int end) {
+		super();
+		this.array = array;
+		this.begin = begin;
+		this.end = end;
+	}
+
+	public SingleThreadSummator() {
+		super();
+	}
+	
+	
+
+	public int getSum() {
+		return sum;
+	}
+
+	@Override
+	public void run() {
+		for (int i = begin; i < end; i++) {
+			this.sum += array[i];
+		}
+
+	}
+
+}
